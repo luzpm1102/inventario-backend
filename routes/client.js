@@ -2,13 +2,6 @@ const express = require('express');
 const db = require('../db');
 const router = express.Router();
 
-// const db = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: '1234',
-//   database: 'inventario',
-// });
-
 //GET ALL CLIENTS FROM CLIENT TABLE
 
 router.get('/', (req, res) => {
@@ -26,9 +19,7 @@ router.post('/insert', (req, res) => {
   console.log(req.body);
 
   db.query(sqlInsert, [nombre, direccion, telefono], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else console.log(result);
+    err ? res.send('Couldnt insert data' + err) : res.send(result);
   });
 });
 
@@ -40,9 +31,7 @@ router.delete('/remove/:id', (req, res) => {
   console.log(req.body);
 
   db.query(sqlDelete, [id], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else console.log(result);
+    err ? res.send('Couldnt delete data' + err) : res.send(result);
   });
 });
 

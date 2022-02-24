@@ -9,18 +9,12 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const clientRouter = require('./routes/client');
+const productRouter = require('./routes/producto');
+const medidaRouter = require('./routes/medida');
 
 app.use('/api/clients', clientRouter);
-
-app.get('/', (req, res) => {
-  const sqlSelect = 'SELECT * FROM inventario.cliente';
-  // const sqlInsert = `INSERT INTO inventario.cliente (nombre, direccion, telefono) VALUES( 'Cliente', 'Atencion', '22334818')`;
-  db.query(sqlSelect, (err, result) => {
-    err ? console.log(err) : console.log('no error');
-    console.log('result', result);
-    res.send(result);
-  });
-});
+app.use('/api/products', productRouter);
+app.use('/api/medida', medidaRouter);
 
 app.listen(5000, () => {
   console.log('Server running on port 5000');
