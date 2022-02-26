@@ -5,28 +5,25 @@ const router = express.Router();
 //GET ALL ORDERS FROM ORDER TABLE
 
 router.get('/', (req, res) => {
-  const sqlSelect = 'SELECT * FROM inventario.orden';
+  const sqlSelect = `select o.idOrden, fecha, nombre as cliente,total from inventario.cliente as c 
+inner join inventario.orden as o on o.idCliente= c.idCliente;
+`;
   db.query(sqlSelect, (err, result) => {
     err ? res.send('Couldnt get data' + err) : res.send(result);
   });
 });
 
-// INSERT PRODUCTO_MEDIDA
+// INSERT ORDER
 
 router.post('/insert', (req, res) => {
-  const { idCliente, total, fecha, fechaEntrega } = req.body;
-  const sqlInsert = `INSERT INTO inventario.orden(idCliente, total, fecha, fechaEntrega) VALUES (?,?,?,?);`;
+  const { idCliente } = req.body;
+  const sqlInsert = `INSERT INTO inventario.orden(idCliente) VALUES (?);`;
   console.log(req.body);
 
-  db.query(
-    sqlInsert,
-    [idCliente, total, fecha, fechaEntrega],
-    (err, result) => {
-      err
-        ? res.send('Couldnt insert data' + err)
-        : res.send('inserted data: ' + result.affectedRows);
-    }
-  );
+  db.query(sqlInsert, [idCliente], (err, result) => {
+    id = result.insertId;
+    err ? res.send('Couldnt insert data' + err) : res.send({ id });
+  });
 });
 
 //DELETE ORDER
