@@ -61,4 +61,13 @@ router.put('/update/:id', (req, res) => {
   });
 });
 
+//Informacion del cliente de la orden
+router.get('/orderClientInfo/:id', (req, res) => {
+  const { id } = req.params;
+  const select = `select nombre, direccion, telefono, fecha, fechaEntrega, total from inventario.cliente as c inner join inventario.orden as o on o.idCliente= c.idCliente where idOrden =${id}`;
+  db.query(select, (err, result) => {
+    err ? res.send('Couldnt read data' + err) : res.send(result);
+  });
+});
+
 module.exports = router;

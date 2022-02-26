@@ -11,6 +11,16 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/inventario', (req, res) => {
+  const sqlSelect = `select p.nombre as Producto, m.nombreCorto as Medida,  pm.cantidad 
+from inventario.producto_medida as pm 
+inner join inventario.producto as p on p.idProducto = pm.idProducto 
+inner join inventario.medida as m on m.idMedida = pm.idMedida`;
+  db.query(sqlSelect, (err, result) => {
+    err ? res.send('Couldnt get data' + err) : res.send(result);
+  });
+});
+
 // INSERT PRODUCTO_MEDIDA
 
 router.post('/insert', (req, res) => {

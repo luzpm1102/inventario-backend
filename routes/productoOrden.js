@@ -63,4 +63,18 @@ router.put('/update/:id', (req, res) => {
   );
 });
 
+// Todos los producto orden de una orden segun ID
+
+router.get('/orderDescription/:id', (req, res) => {
+  const { id } = req.params;
+  const select = `select  ip.nombre as Producto , ip.descripcion, p.cantidad, p.precioUnitario , p.precioTotal
+    from inventario.producto_orden as p
+    inner join inventario.orden as o on p.idOrden = o.idOrden 
+    inner join inventario.producto_medida as pm  on pm.idProductoMedida = p.idProductoMedida
+    inner join inventario.producto as ip on ip.idProducto = pm.idProducto where o.idOrden= ${id}`;
+  db.query(select, (err, result) => {
+    err ? res.send('Couldnt get data' + err) : res.send(result);
+  });
+});
+
 module.exports = router;
