@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/inventario', (req, res) => {
-  const sqlSelect = `select p.nombre as Producto, m.nombreCorto as Medida,  pm.cantidad 
+  const sqlSelect = `select pm.idProductoMedida, p.nombre as Producto, m.nombreCorto as Medida,  pm.cantidad as Existencia, pm.precio 
 from inventario.producto_medida as pm 
 inner join inventario.producto as p on p.idProducto = pm.idProducto 
 inner join inventario.medida as m on m.idMedida = pm.idMedida`;

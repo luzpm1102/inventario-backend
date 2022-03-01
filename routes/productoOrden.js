@@ -26,6 +26,32 @@ router.post('/insert', (req, res) => {
     }
   );
 });
+router.post('/insertMultiples', (req, res) => {
+  const sqlInsert = `INSERT INTO inventario.producto_orden ( idOrden, idProductoMedida, cantidad, precioUnitario) VALUES ?`;
+  const { products } = req.body;
+  console.log(products);
+
+  db.query(
+    sqlInsert,
+    [
+      products.map((item) => {
+        return [
+          item.idOrden,
+          item.idProductoMedida,
+          item.cantidad,
+          item.precioUnitario,
+        ];
+      }),
+    ],
+    (error, results) => {
+      error ? res.send('Couldnt insert data' + error) : res.send(results);
+    }
+  );
+
+  //   db.query(sqlInsert, [finalResult], (err, result) => {
+  //     err ? res.send('Couldnt insert data' + err) : res.send(result);
+  //   });
+});
 
 //delete producto_orden
 
@@ -65,9 +91,9 @@ router.put('/update/:id', (req, res) => {
 
 // Todos los producto orden de una orden segun ID
 
-router.get('/orderDescription/:id', (req, res) => {
+router.get('/orderDetails/:id', (req, res) => {
   const { id } = req.params;
-  const select = `select  ip.nombre as Producto , ip.descripcion, p.cantidad, p.precioUnitario , p.precioTotal
+  const select = `select o.idOrden, p.idProductoOrden, ip.nombre as Producto , ip.descripcion, p.cantidad, p.precioUnitario , p.precioTotal
     from inventario.producto_orden as p
     inner join inventario.orden as o on p.idOrden = o.idOrden 
     inner join inventario.producto_medida as pm  on pm.idProductoMedida = p.idProductoMedida

@@ -31,7 +31,7 @@ router.delete('/remove/:id', (req, res) => {
   console.log(req.body);
 
   db.query(sqlDelete, [id], (err, result) => {
-    err ? res.send('Couldnt delete data' + err) : res.send(result);
+    err ? res.send(err) : res.send(result);
   });
 });
 

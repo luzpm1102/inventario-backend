@@ -16,11 +16,11 @@ inner join inventario.orden as o on o.idCliente= c.idCliente;
 // INSERT ORDER
 
 router.post('/insert', (req, res) => {
-  const { idCliente } = req.body;
-  const sqlInsert = `INSERT INTO inventario.orden(idCliente) VALUES (?);`;
+  const { idCliente, fechaEntrega } = req.body;
+  const sqlInsert = `INSERT INTO inventario.orden(idCliente, fechaEntrega) VALUES (?, ?);`;
   console.log(req.body);
 
-  db.query(sqlInsert, [idCliente], (err, result) => {
+  db.query(sqlInsert, [idCliente, fechaEntrega], (err, result) => {
     id = result.insertId;
     err ? res.send('Couldnt insert data' + err) : res.send({ id });
   });
@@ -61,7 +61,7 @@ router.put('/update/:id', (req, res) => {
 //Informacion del cliente de la orden
 router.get('/orderClientInfo/:id', (req, res) => {
   const { id } = req.params;
-  const select = `select nombre, direccion, telefono, fecha, fechaEntrega, total from inventario.cliente as c inner join inventario.orden as o on o.idCliente= c.idCliente where idOrden =${id}`;
+  const select = `select  o.idCliente, nombre, direccion, telefono, fecha, fechaEntrega, total from inventario.cliente as c inner join inventario.orden as o on o.idCliente= c.idCliente where idOrden =${id}`;
   db.query(select, (err, result) => {
     err ? res.send('Couldnt read data' + err) : res.send(result);
   });
